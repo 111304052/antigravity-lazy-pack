@@ -12,6 +12,7 @@ description: 一次安裝所有 AntiGravity 懶人包技能。說「全部安裝
 3. **03-firebase** — 連接 Firebase
 4. **04-draw** — 生圖指引
 5. **05-workflow** — 開工/收工/初始化
+6. **06-obsidian** — 連接 Obsidian (MCPVault)
 
 每完成一個報告進度，最終回報總表。
 已安裝的工具自動跳過。
