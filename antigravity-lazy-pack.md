@@ -4,7 +4,7 @@
 - **專案名稱**：antigravity-lazy-pack
 - **主要工作目錄**：`c:\Users\leots\OneDrive\Desktop\Antigravity2.20260626`
 - **GitHub Repository**：[mathruffian-dot/antigravity-lazy-pack](https://github.com/mathruffian-dot/antigravity-lazy-pack)
-- **目前狀態**：🟢 服務連接與工作流初始化完成，三大學習專案建置完畢
+- **目前狀態**：🟢 服務連接與全自動工作流設定完成
 
 ---
 
@@ -13,10 +13,10 @@
 ### 1. NotebookLM MCP (01-notebooklm)
 - **狀態**：🟢 已連接 ( leotsai0508@gmail.com )
 - **安裝路徑**：`C:\Users\leots\anaconda3\Scripts\nlm.EXE`
-- **MCP 註冊**：已寫入全域 `mcp_config.json`
+- **MCP 註冊**：已寫入全域 `mcp_config.json`（已修正為直接呼叫 `notebooklm-mcp.EXE`）
 
 ### 2. GitHub CLI (02-github)
-- **狀態**：🟢 已安裝且已使用 Personal Access Token 完成登入
+- **狀態**：🟢 已安裝且已完成 Web 登入
 - **版本**：gh version 2.95.0
 - **MCP 註冊**：使用內建 Git 工具搭配 GitHub CLI 執行
 
@@ -29,6 +29,11 @@
 - **儲存庫路徑**：`C:\Users\leots\OneDrive\文件\Secondbrain`
 - **MCP 註冊**：已寫入全域 `mcp_config.json` (使用 `mcpvault`)
 
+### 5. Obsidian Git 自動備份
+- **狀態**：🟢 已設定背景全自動同步
+- **私有備份庫**：[https://github.com/111304052/secondbrain-vault](https://github.com/111304052/secondbrain-vault) (Private)
+- **同步機制**：自動提交與同步間隔 10 分鐘，自動拉取間隔 10 分鐘，並配置專用 `.gitignore` 防衝突。
+
 ---
 
 ## 每日工作紀錄
@@ -37,20 +42,14 @@
 - **完成事項**：
   - 成功從 GitHub 複製 `antigravity-lazy-pack` 專案。
   - 將 7 個懶人包技能（00 至 06）複製並安裝至全域自訂技能目錄。
-  - 安裝並驗證 `notebooklm-mcp-cli`。
+  - 安裝並驗證 `notebooklm-mcp-cli`，修正啟動路徑至 `notebooklm-mcp.EXE` 解決 MCP Error。
   - 透過 `winget` 自動安裝 **GitHub CLI** 與 **Node.js LTS**。
   - 全域安裝 `@bitbonsai/mcpvault` (Obsidian MCP 伺服器)。
   - 建立全新 Obsidian 儲存庫 `Secondbrain` 並初始化專案駕駛艙。
   - 完成 `mcp_config.json` 註冊設定，整合 NotebookLM、Firebase、Obsidian。
   - 於專案根目錄建立 `ANTIGRAVITY.md` 規則檔案。
-  - **[新增]** 設定 Git 全域帳號 (`leotsai`) 與匿名保護電子郵件。
-  - **[新增]** 本地與 GitHub 同步建立三個平台之 Private 儲存庫：`Tibame`、`Hahow`、`Graduate-School-of-Statistics`（統研所）。
-  - **[新增]** 在 Obsidian 中為三個平台建立對應的資料夾與結構化「學習主頁」筆記，規劃專屬學習地圖。
-  - **[新增]** 同步調整本機資料夾結構（Hahow 補上 `R`、`SQL`、`Tableau`；統研所調整為`必修`、`選修`、`教授`、`研究計畫`），並將所有現有課程檔案首次推送到 GitHub。
+  - 為本地 Obsidian 儲存庫進行 Git 初始化，配置排除暫存檔的 `.gitignore`。
+  - 在 GitHub 上建立私有儲存庫 `secondbrain-vault` 並完成首次推送。
+  - 引導使用者在 Obsidian 軟體中成功安裝並啟用 `Obsidian Git` 插件，設定每 10 分鐘自動雙向同步。
 - **下一步**：
-  - 開始將 PyCharm、RStudio 的學習程式碼與資料放入本機資料夾，並要求 AI 助理自動同步到 GitHub 與 Obsidian。
-  - 撰寫第一個單元的學習筆記。
-- **踩坑紀錄/特別注意**：
-  - **Windows 上的 GitHub CLI 登入問題**：網頁登入流在背景容易卡死在等待 Enter 鍵。改用 Personal Access Token (PAT) 登入可 100% 解決此問題。
-  - **GitHub 大檔案警告**：Tibame 資料夾中有大於 70MB 的 PDF 與 zip 壓縮檔，Git 雖成功推上但觸發了 GitHub 推薦 50MB 以下的警示。後續應避免放入大於 100MB 的大檔案，或使用 Git LFS。
-  - **Git 全域設定未配置**：新環境初次使用 Git 時需要先設定 `user.name` 與 `user.email`，已使用 GitHub 匿名信箱完成全域配置。
+  - 專案連接與自動化備份已全部就緒，可開始進行正式開發與筆記管理。
