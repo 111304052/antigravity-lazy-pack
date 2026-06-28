@@ -54,3 +54,6 @@ images/generated/
 wordcloud-app/
 scratch/
 tmp/
+
+# Upgrade Kit
+gem-to-agent-kit/
