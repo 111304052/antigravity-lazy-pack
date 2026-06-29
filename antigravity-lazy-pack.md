@@ -3,7 +3,7 @@
 ## 專案資訊
 - **專案名稱**：antigravity-lazy-pack
 - **主要工作目錄**：`c:\Users\leots\OneDrive\Desktop\Antigravity2.20260626`
-- **GitHub Repository**：[mathruffian-dot/antigravity-lazy-pack](https://github.com/mathruffian-dot/antigravity-lazy-pack)
+- **GitHub Repository**：[111304052/antigravity-lazy-pack](https://github.com/111304052/antigravity-lazy-pack)
 - **目前狀態**：🟢 服務連接與全自動工作流設定完成
 
 ---
@@ -54,7 +54,53 @@
 - **下一步**：
   - 專案連接與自動化備份已全部就緒，可開始進行正式開發與筆記管理。
 
-### 2026-06-29
+### 2026-06-28 (收工已完成)
+- **完成事項**：
+  - 🟢 執行開工檢查，確認專案規則檔與 Git status。
+  - 🟢 成功將 `gem-to-agent-kit` 建立為使用者 GitHub 上的獨立私有儲存庫 `https://github.com/111304052/gem-to-agent-kit`，並完成首推。
+  - 🟢 協助安裝與配置 Google Drive 桌面版，將資料夾更名為 `Gemini Gems` 並成功被 `find_gem_folder.py` 自動定位。
+  - 🟢 自動安裝所有相依的 Python 套件與工具（`python-docx`、`python-pptx`、`edge-tts`、`yt-dlp`）。
+  - 🟢 成功執行「選項 A」測試：在本地建立 `數學出題助手` 專案，寫入 `generate_exam.py` 並通過煙霧測試生成模擬考卷 Word 文件。
+  - 🟢 釐清關鍵觀念：說明 `Gemini Gems` 與專案 `input/` 檔案定位。
+- **下一步**：
+  - 待使用者將網頁端真實的 Gem 檔案同步至雲端後，執行「選項 B」進行真實 Gem 的升級部署。
+
+### 2026-06-28 (收工已完成 - 第二次)
+- **完成事項**：
+  - 🟢 執行開工檢查，Git status 乾淨。
+  - 🟢 成功啟動「選項 B」：在 `G:\我的雲端硬碟\Gemini Gems` 中手動設定真實 Gem `YouTube學習筆記特助` 規則並成功解析。
+  - 🟢 成功測試並執行 `/summarize` 工作流：
+    - 使用 `yt-dlp` 自動下載影片中繼資料與繁中字幕檔。
+    - 深度解析「三師爸Sense Bar - Google AntiGravity 2.0 實測評價」影片。
+    - 成功生成結構化 Markdown 學習筆記並儲存至本機 output。
+    - 呼叫生圖工具生成一張核心概念示意圖 `concept.png` 並嵌入筆記中。
+- **下一步**：
+  - 專案運作完全正常，使用者可自行將影片網址寫入 `url.txt` 並執行 `/summarize` 快速積累筆記。
+
+### 2026-06-29 (開工中 - 第一次)
+- **完成事項**：
+  - 🟢 執行開工檢查，Git status 乾淨。
+  - 🟢 更新 `AGENTS.md`、`SKILL.md` 與 `summarize.md` 工作流核心規則：
+    1. **生圖規範**：預設不生圖；若有要求則啟動對話式需求訪問。
+    2. **Obsidian 同步**：在 Obsidian 庫中新增 `YouTube學習筆記/` 資料夾，設定筆記自動同步複製。
+    3. **播放清單分組**：更新 `download_transcript.py` 支援批次處理，並自動依照 `playlist_title` 欄位建立播放清單子資料夾歸類。
+  - 🟢 成功於 Obsidian 本地儲存庫中新建 `YouTube學習筆記` 資料夾。
+- **下一步**：
+  - 專案運作完全正常，使用者可自行將影片網址寫入 `url.txt` 並執行 `/summarize` 快速積累筆記。
+
+### 2026-06-29 (收工已完成 - 第一次)
+- **完成事項**：
+  - 🟢 成功執行 `/summarize` 測試播放清單批次處理。
+  - 🟢 讀取 `input/url.txt` 中的播放清單連結。
+  - 🟢 自動利用 `yt-dlp` 下載清單內全部 8 部影片的中繼資料與繁中字幕。
+  - 🟢 自動解析字幕，成功批量生成 EP01 ~ EP08 共 8 份結構化 Markdown 學習筆記。
+  - 🟢 遵循新規 1：預設不生圖，本次未調用生圖工具。
+  - 🟢 遵循新規 2：將全部 8 份筆記同步寫入 Obsidian 本地庫。
+  - 🟢 遵循新規 3：自動偵測播放清單名稱 `AntiGravity_google_AI_Agents`，並以此名稱在 `output/` 及 Obsidian 下建立子資料夾，將 8 份筆記完美分類歸檔。
+- **下一步**：
+  - 播放清單與批次自動分組功能測試 100% 成功，使用者可以直接投入日常知識庫管理中。
+
+### 2026-06-29 (收工已完成 - 第二次)
 - **完成事項**：
   - 成功設定並測試 VS Code Remote Tunnels，將電腦端與手機網頁端連通（通道名稱：`laptop-vvt4c58h`）。
   - 安裝並設定「Chrome 遠端桌面」服務（無人值守模式），順利建立手機端對電腦桌面的 100% 遠端操控與無障礙連線。
