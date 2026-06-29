@@ -53,3 +53,14 @@
   - 引導使用者在 Obsidian 軟體中成功安裝並啟用 `Obsidian Git` 插件，設定每 10 分鐘自動雙向同步。
 - **下一步**：
   - 專案連接與自動化備份已全部就緒，可開始進行正式開發與筆記管理。
+
+### 2026-06-29
+- **完成事項**：
+  - 成功設定並測試 VS Code Remote Tunnels，將電腦端與手機網頁端連通（通道名稱：`laptop-vvt4c58h`）。
+  - 安裝並設定「Chrome 遠端桌面」服務（無人值守模式），順利建立手機端對電腦桌面的 100% 遠端操控與無障礙連線。
+  - 實際測試並驗證了透過手機遠端遙控執行系統指令（`run_command`）與「同意授權 (Approve)」的完整運作流程。
+- **踩坑紀錄**：
+  - 手機 VS Code 網頁版（`vscode.dev`）內建的聊天面板為 Copilot 專用，在未登入或無訂閱時會報錯 `Language model unavailable`。因此，若要遠端遙控我（Antigravity），應透過「遠端桌面」直接對電腦本機的應用程式視窗下指令。
+- **下一步**：
+  - 開始進行 [YouTube學習筆記特助](file:///c:/Users/leots/OneDrive/Desktop/Antigravity2.20260626/YouTube學習筆記特助/) 的批次影片字幕處理與結構化學習筆記寫入。
+
