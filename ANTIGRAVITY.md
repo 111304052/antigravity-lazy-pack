@@ -19,7 +19,7 @@ Obsidian vault：C:\Users\leots\OneDrive\文件\Secondbrain
 - 涉及檔案操作時回報完整產出位置。
 - 使用 PowerShell 語法。
 - 開工時讀本檔、讀 Obsidian 駕駛艙、檢查 Git 狀態。
-- 收工時更新 Obsidian，必要時更新本檔，檢查 diff 後只提交相關檔案。
+- 收工時更新專案筆記後，務必將其複製至 Obsidian 筆記庫（C:\Users\leots\OneDrive\文件\Secondbrain），並在該目錄下完成 Git 同步，隨後才進行工作專案目錄的提交推送。必要時才更新本檔，檢查 diff 後只提交相關檔案。
 - 不把每日流水帳寫進本檔。
 
 ## 不要做
