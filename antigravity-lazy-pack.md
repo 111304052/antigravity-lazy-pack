@@ -34,6 +34,11 @@
 - **私有備份庫**：[https://github.com/111304052/secondbrain-vault](https://github.com/111304052/secondbrain-vault) (Private)
 - **同步機制**：自動提交與同步間隔 10 分鐘，自動拉取間隔 10 分鐘，並配置專用 `.gitignore` 防衝突。
 
+### 6. Google Calendar MCP (google-calendar-mcp)
+- **狀態**：🟢 已連接且已完成 OAuth 授權 (已儲存 Token)
+- **安裝路徑**：`c:\Users\leots\OneDrive\Desktop\Antigravity2.20260626\google-calendar-mcp`
+- **MCP 註冊**：已寫入全域 `mcp_config.json` (使用 `node build/index.js`)
+
 ---
 
 ## 每日工作紀錄
@@ -109,4 +114,13 @@
   - 手機 VS Code 網頁版（`vscode.dev`）內建的聊天面板為 Copilot 專用，在未登入或無訂閱時會報錯 `Language model unavailable`。因此，若要遠端遙控我（Antigravity），應透過「遠端桌面」直接對電腦本機的應用程式視窗下指令。
 - **下一步**：
   - 開始進行 [YouTube學習筆記特助](file:///c:/Users/leots/OneDrive/Desktop/Antigravity2.20260626/YouTube學習筆記特助/) 的批次影片字幕處理與結構化學習筆記寫入。
+
+### 2026-06-29 (第三次 - 行事曆整合完成)
+- **完成事項**：
+  - 🟢 協助設定 Google Cloud Console OAuth 2.0 憑證與測試使用者。
+  - 🟢 成功 Clone `pashpashpash/google-calendar-mcp` 並修復 Windows ES Modules 的路徑解析 Bug。
+  - 🟢 協助完成本地 OAuth 2.0 驗證（Port 3000），產生 `.gcp-saved-tokens.json` 實現無縫背景登入。
+  - 🟢 將 `google-calendar` MCP 伺服器成功註冊至全域 `mcp_config.json`。
+- **下一步**：
+  - 重啟助理會話後即可正式使用 Google 行事曆的行程規劃與檢視功能。
 
