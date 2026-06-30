@@ -1,18 +1,20 @@
-const CACHE_NAME = 'piggy-cache-v1';
+const CACHE_NAME = 'piggy-cache-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/style.css',
   '/app.js',
-  'https://unpkg.com/lucide@latest',
-  'https://cdn.jsdelivr.net/npm/chart.js'
+  '/manifest.json',
+  '/icon.png',
+  '/icon-512.png'
 ];
 
 // Install Event
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('Caching shell assets');
+      console.log('Caching local shell assets');
+      // Use Map to fetch and ignore failed or redirected assets if any
       return cache.addAll(ASSETS_TO_CACHE);
     }).then(() => self.skipWaiting())
   );
@@ -47,7 +49,7 @@ self.addEventListener('fetch', event => {
       }
       
       return fetch(event.request).then(networkResponse => {
-        // Cache newly requested static files
+        // Cache newly requested static files (including CDN resources like Chart.js and Lucide)
         if (event.request.method === 'GET' && networkResponse.status === 200) {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then(cache => {
