@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <!-- iOS web app capable and notch adaptions -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="隨手記">
+  
+  <title>隨手記 - 智慧記帳助手</title>
+  
+  <!-- Google Fonts: Outfit and Noto Sans TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Lucide Icons for premium looking icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- App Container -->
+  <div class="app-container">
+    
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-left-box" style="display: flex; align-items: center; gap: 8px;">
+        <div class="header-month-selector" id="monthSelectorBtn">
+          <span id="currentMonthYear">2026年6月</span>
+          <i data-lucide="chevron-down"></i>
+        </div>
+        <div class="sync-status-badge online" id="syncStatusBadge">
+          <i data-lucide="cloud-check" id="syncStatusIcon" style="width: 14px; height: 14px;"></i>
+          <span id="syncStatusText">已連線</span>
+        </div>
+      </div>
+      <div class="header-view-toggle">
+        <button class="active" id="btnToggleCalendar">行事曆</button>
+        <button id="btnToggleList">清單</button>
+      </div>
+    </header>
+
+    <!-- Main Screens Viewport -->
+    <main class="app-viewport">
+      
+      <!-- Tab 1: Ledger Screen -->
+      <section id="screenLedger" class="app-screen active">
+        
+        <!-- Calendar Container -->
+        <div class="calendar-container" id="calendarSection">
+          <div class="calendar-weekdays">
+            <span>週日</span><span>週一</span><span>週二</span><span>週三</span><span>週四</span><span>週五</span><span>週六</span>
+          </div>
+          <div class="calendar-grid" id="calendarGrid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Transactions List under Calendar -->
+        <div class="daily-transactions-box">
+          <div class="daily-header">
+            <span class="selected-date-text" id="selectedDateText">2026年6月30日 週二</span>
+            <span class="daily-summary-val" id="dailySummaryVal">支出: 0</span>
+          </div>
+          
+          <div class="transactions-list" id="dailyTransactionsList">
+            <!-- Dynamically populated -->
+            <div class="empty-state">
+              <i data-lucide="inbox"></i>
+              <p>今天沒有記帳紀錄喔</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 2: Charts Screen -->
+      <section id="screenCharts" class="app-screen">
+        <!-- Type Selector: Expense vs Income -->
+        <div class="charts-type-selector">
+          <button class="active" id="btnChartTypeExpense" onclick="setChartType('expense')">支出</button>
+          <button id="btnChartTypeIncome" onclick="setChartType('income')">收入</button>
+        </div>
+        
+        <!-- Dimension Tabs: Category, Account, Member -->
+        <div class="charts-nav-tabs">
+          <button class="active" id="btnChartDimCategory" onclick="setChartDimension('category')">類別比</button>
+          <button id="btnChartDimAccount" onclick="setChartDimension('account')">帳戶比</button>
+          <button id="btnChartDimMember" onclick="setChartDimension('member')">成員比</button>
+        </div>
+        
+        <div class="chart-wrapper">
+          <div class="chart-canvas-container">
+            <canvas id="categoryChart"></canvas>
+          </div>
+          <div class="chart-stats">
+            <div class="stat-item">
+              <span class="stat-label">合計金額</span>
+              <span class="stat-value" id="chartTotalSum">$0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">平均每天</span>
+              <span class="stat-value" id="chartDailyAvg">$0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-list-section">
+          <h3>類別明細</h3>
+          <div class="chart-category-list" id="chartCategoryList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 3: Accounts Screen -->
+      <section id="screenAccounts" class="app-screen">
+        <div class="accounts-header">
+          <div class="net-worth-card">
+            <span class="net-worth-label">總資產 (淨額)</span>
+            <span class="net-worth-value" id="totalNetWorth">$0</span>
+          </div>
+        </div>
+        <div class="accounts-list" id="accountsListContainer">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- Tab 4: Settings Screen -->
+      <section id="screenSettings" class="app-screen">
+        <div class="settings-list">
+          <div class="settings-group">
+            <h3>同步與備份</h3>
+            <button class="settings-item" id="btnSyncObsidian">
+              <div class="item-left">
+                <i data-lucide="refresh-cw"></i>
+                <span>同步統計至 Obsidian</span>
+              </div>
+              <i data-lucide="chevron-right"></i>
+            </button>
+            <button class="settings-item" id="btnBackupExport">
+              <div class="item-left">
+                <i data-lucide="download"></i>
+                <span>匯出資料備份 (JSON)</span>
+              </div>
+              <i data-lucide="chevron-right"></i>
+            </button>
+            <label class="settings-item" style="cursor: pointer;">
+              <div class="item-left">
+                <i data-lucide="upload"></i>
+                <span>匯入資料備份</span>
+              </div>
+              <input type="file" id="btnBackupImport" accept=".json" style="display:none;">
+              <i data-lucide="chevron-right"></i>
+            </label>
+          </div>
+
+          <div class="settings-group">
+            <h3>系統管理</h3>
+            <button class="settings-item danger-action" id="btnClearData">
+              <div class="item-left">
+                <i data-lucide="trash-2"></i>
+                <span>清除所有記帳紀錄</span>
+              </div>
+            </button>
+          </div>
+
+          <div class="settings-info">
+            <p>隨手記 - 智慧記帳助手 v1.0.0</p>
+            <p>伺服器已連接，資料安全儲存於本機硬碟中</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="app-navbar">
+      <button class="nav-btn active" onclick="switchScreen('ledger')">
+        <i data-lucide="book-open"></i>
+        <span>帳本</span>
+      </button>
+      <button class="nav-btn" onclick="switchScreen('charts')">
+        <i data-lucide="pie-chart"></i>
+        <span>圖表分析</span>
+      </button>
+      
+      <!-- Center Add Button -->
+      <button class="nav-btn add-btn" id="btnOpenAddModal">
+        <div class="add-btn-inner">
+          <i data-lucide="plus"></i>
+        </div>
+        <span>記一筆</span>
+      </button>
+      
+      <button class="nav-btn" onclick="switchScreen('accounts')">
+        <i data-lucide="wallet"></i>
+        <span>帳戶</span>
+      </button>
+      <button class="nav-btn" onclick="switchScreen('settings')">
+        <i data-lucide="settings"></i>
+        <span>設定</span>
+      </button>
+    </nav>
+
+  </div> <!-- End App Container -->
+
+  <!-- Month Picker Modal (Overlay) -->
+  <div class="modal-backdrop" id="monthPickerModal">
+    <div class="modal-content bottom-sheet">
+      <div class="modal-header">
+        <h2>選擇月份</h2>
+        <button class="close-modal-btn" onclick="closeModal('monthPickerModal')">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="month-picker-body">
+        <div class="year-selector">
+          <button onclick="changePickerYear(-1)"><i data-lucide="chevron-left"></i></button>
+          <span id="pickerYearVal">2026</span>
+          <button onclick="changePickerYear(1)"><i data-lucide="chevron-right"></i></button>
+        </div>
+        <div class="months-grid">
+          <button onclick="selectPickerMonth(0)">1月</button>
+          <button onclick="selectPickerMonth(1)">2月</button>
+          <button onclick="selectPickerMonth(2)">3月</button>
+          <button onclick="selectPickerMonth(3)">4月</button>
+          <button onclick="selectPickerMonth(4)">5月</button>
+          <button onclick="selectPickerMonth(5)">6月</button>
+          <button onclick="selectPickerMonth(6)">7月</button>
+          <button onclick="selectPickerMonth(7)">8月</button>
+          <button onclick="selectPickerMonth(8)">9月</button>
+          <button onclick="selectPickerMonth(9)">10月</button>
+          <button onclick="selectPickerMonth(10)">11月</button>
+          <button onclick="selectPickerMonth(11)">12月</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Transaction Modal (Overlay) -->
+  <div class="modal-backdrop" id="addTransactionModal">
+    <div class="modal-content full-screen-modal">
+      <div class="modal-header">
+        <button class="modal-cancel-btn" onclick="closeModal('addTransactionModal')">
+          <i data-lucide="x"></i>
+        </button>
+        <div class="modal-type-tabs">
+          <button class="active" id="tabTypeExpense" onclick="setTransactionType('expense')">支出</button>
+          <button id="tabTypeIncome" onclick="setTransactionType('income')">收入</button>
+          <button id="tabTypeTransfer" onclick="setTransactionType('transfer')">轉帳</button>
+        </div>
+        <button class="modal-save-btn" id="btnSaveTransaction">儲存</button>
+      </div>
+
+      <div class="modal-scroll-body">
+        <!-- Form Controls -->
+        <form class="transaction-form" onsubmit="return false;">
+          
+          <!-- Date Display/Input -->
+          <div class="form-row date-row">
+            <span class="form-label"><i data-lucide="calendar"></i> 日期</span>
+            <input type="date" id="formDate" required>
+          </div>
+
+          <!-- Amount Input & Display -->
+          <div class="form-row amount-row">
+            <span class="form-label"><i data-lucide="coins"></i> 金額</span>
+            <div class="amount-input-box" id="amountDisplayBox">
+              <span class="currency-symbol">$</span>
+              <span class="amount-val-display" id="formAmountText">0</span>
+              <input type="hidden" id="formAmount" value="0">
+            </div>
+          </div>
+
+          <!-- Conditional fields for Expense/Income vs Transfer -->
+          <div id="standardFields">
+            <!-- Category Grid -->
+            <div class="form-row-block">
+              <span class="form-label-block"><i data-lucide="tag"></i> 類別</span>
+              <div class="category-grid" id="categoryGridList">
+                <!-- Dynamically populated categories -->
+              </div>
+              <input type="hidden" id="formCategory" value="飲食">
+            </div>
+
+            <!-- Target Account -->
+            <div class="form-row select-row">
+              <span class="form-label"><i data-lucide="credit-card"></i> 帳戶</span>
+              <select id="formAccount">
+                <option value="cash">現金</option>
+                <option value="bank">銀行</option>
+                <option value="card">信用卡</option>
+              </select>
+            </div>
+
+            <!-- Member -->
+            <div class="form-row select-row">
+              <span class="form-label"><i data-lucide="user"></i> 成員</span>
+              <select id="formMember">
+                <option value="自己">自己</option>
+                <option value="家族">家族</option>
+                <option value="朋友">朋友</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="transferFields" style="display: none;">
+            <!-- From Account -->
+            <div class="form-row select-row">
+              <span class="form-label"><i data-lucide="log-out"></i> 從帳戶</span>
+              <select id="formFromAccount">
+                <option value="cash">現金</option>
+                <option value="bank">銀行</option>
+                <option value="card">信用卡</option>
+              </select>
+            </div>
+
+            <!-- To Account -->
+            <div class="form-row select-row">
+              <span class="form-label"><i data-lucide="log-in"></i> 到帳戶</span>
+              <select id="formToAccount">
+                <option value="cash">現金</option>
+                <option value="bank" selected>銀行</option>
+                <option value="card">信用卡</option>
+              </select>
+            </div>
+
+            <!-- Transfer Fee -->
+            <div class="form-row checkbox-row">
+              <span class="form-label"><i data-lucide="percent"></i> 手續費</span>
+              <div class="fee-toggle-container">
+                <input type="number" id="formTransferFee" value="0" placeholder="0" class="fee-input">
+              </div>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="form-row text-row">
+            <span class="form-label"><i data-lucide="hash"></i> 標籤</span>
+            <input type="text" id="formTags" placeholder="自訂標籤 (用空格隔開)">
+          </div>
+
+          <!-- Receipt Image (Up to 3, Mock Upload) -->
+          <div class="form-row-block">
+            <span class="form-label-block"><i data-lucide="image"></i> 收據照片 (最多 3 張)</span>
+            <div class="receipts-gallery">
+              <div class="receipt-add-box" id="btnUploadReceipt">
+                <i data-lucide="camera"></i>
+                <input type="file" id="receiptFileInput" accept="image/*" multiple style="display:none;">
+              </div>
+              <div class="receipt-thumbnails" id="receiptThumbnails">
+                <!-- Thumbnails go here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Remarks / Notes -->
+          <div class="form-row text-row alignment-top">
+            <span class="form-label"><i data-lucide="file-text"></i> 備註</span>
+            <textarea id="formRemarks" rows="2" placeholder="寫點備註吧..."></textarea>
+          </div>
+          
+          <div class="delete-btn-container" id="deleteBtnContainer" style="display: none;">
+            <button type="button" class="btn-delete-transaction" id="btnDeleteTransaction">刪除此筆交易</button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Built-in Numeric / Calculator Keyboard -->
+      <div class="calculator-keyboard-wrapper active" id="calcKeyboard">
+        <div class="calc-formula-bar">
+          <span id="calcFormulaDisplay"></span>
+        </div>
+        <div class="calc-grid">
+          <!-- First column: Operators -->
+          <button class="calc-btn op" data-action="÷">÷</button>
+          <button class="calc-btn num" data-val="7">7</button>
+          <button class="calc-btn num" data-val="8">8</button>
+          <button class="calc-btn num" data-val="9">9</button>
+          
+          <button class="calc-btn op" data-action="×">×</button>
+          <button class="calc-btn num" data-val="4">4</button>
+          <button class="calc-btn num" data-val="5">5</button>
+          <button class="calc-btn num" data-val="6">6</button>
+          
+          <button class="calc-btn op" data-action="-">-</button>
+          <button class="calc-btn num" data-val="1">1</button>
+          <button class="calc-btn num" data-val="2">2</button>
+          <button class="calc-btn num" data-val="3">3</button>
+          
+          <button class="calc-btn op" data-action="+">+</button>
+          <button class="calc-btn num" data-val=".">.</button>
+          <button class="calc-btn num" data-val="0">0</button>
+          <button class="calc-btn clear" data-action="⌫"><i data-lucide="delete"></i></button>
+
+          <!-- Action bar -->
+          <button class="calc-btn action-key clear-all" data-action="C">C</button>
+          <button class="calc-btn action-key num-helper" data-action="00">00</button>
+          <button class="calc-btn action-key num-helper" data-action="000">000</button>
+          <button class="calc-btn action-key equals" data-action="=">=</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Main JavaScript File -->
+  <script src="app.js"></script>
+</body>
+</html>
