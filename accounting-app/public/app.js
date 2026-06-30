@@ -1317,3 +1317,17 @@ window.selectPickerMonth = selectPickerMonth;
 window.changeChartTab = changeChartTab;
 window.closeModal = closeModal;
 window.setTransactionType = setTransactionType;
+
+// Register Service Worker for offline PWA support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => {
+        console.log('Service Worker registered successfully!', reg.scope);
+      })
+      .catch(err => {
+        console.log('Service Worker registration failed:', err);
+      });
+  });
+}
+

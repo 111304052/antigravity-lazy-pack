@@ -1,0 +1,22 @@
+{
+  "name": "隨手記",
+  "short_name": "隨手記",
+  "description": "個人智慧記帳助手 - 本地優先與離線同步",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#121214",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

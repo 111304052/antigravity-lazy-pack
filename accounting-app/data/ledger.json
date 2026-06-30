@@ -11237,7 +11237,7 @@
       "date": "2025-10-10",
       "amount": 60,
       "type": "expense",
-      "category": "飲食",
+      "category": "飲���",
       "remarks": "",
       "tags": [],
       "receipts": [],
@@ -37181,7 +37181,7 @@
       "date": "2023-06-04",
       "amount": 45,
       "type": "expense",
-      "category": "飲食",
+      "category": "飲��",
       "remarks": "",
       "tags": [],
       "receipts": [],
@@ -46943,13 +46943,25 @@
       "receipts": [],
       "accountId": "cash",
       "member": "自己"
+    },
+    {
+      "id": "_2k9809hq6",
+      "date": "2026-06-30",
+      "amount": 20,
+      "type": "expense",
+      "category": "飲食",
+      "remarks": "",
+      "tags": [],
+      "receipts": [],
+      "accountId": "cash",
+      "member": "自己"
     }
   ],
   "accounts": [
     {
       "id": "cash",
       "name": "現金",
-      "balance": -366254
+      "balance": -366274
     },
     {
       "id": "bank",
