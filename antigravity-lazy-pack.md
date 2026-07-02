@@ -54,7 +54,14 @@
 ### 2026-07-02
 - **開工確認**：執行開工檢查，Git status 乾淨。
 - **完成事項**：
-  - **YouTube學習筆記特助**：更新 `url.txt` 後，批次下載並解析【n8n 工作流基礎教學】播放清單共 3 部影片之資訊與中文 VTT 字幕；開發並執行 `write_n8n_ordered_notes.py` 腳本，手動調整為正向順序（EP01 至 EP03，對應 EP.1 到 EP.3）批量生成結構化學習筆記，同步寫入本機 `output` 目錄與 Obsidian `YouTube學習筆記/n8n 工作流基礎教學` 中。
+  - **YouTube學習筆記特助 (n8n 任務)**：將【n8n 工作流基礎教學】播放清單 3 部影片生成結構化筆記。
+  - **目錄重構與 PAPAYA 整合**：
+    - 建立 `PAPAYA 電腦教室` 資料夾，並將先前的 `n8n 工作流基礎教學` 筆記移入該子目錄中。
+    - 下載並清理了 3 部 AI 私人助理/本機模型單一影片（Claude Code, Hermes Agent, LM Studio）與全新播放清單【網頁 & 架站 & 開發】共 11 部影片。
+    - 開發並執行 `write_papaya_notes.py` 腳本，將 3 部單一影片生成於 `PAPAYA 電腦教室/` 目錄，將 11 部影片重新調整為**合乎邏輯的學習順序**（HTML/CSS ➔ JS ➔ Git ➔ SQL ➔ Figma ➔ Google Sites ➔ Wix ➔ WordPress 01~04）生成於 `PAPAYA 電腦教室/網頁 & 架站 & 開發` 目錄下。
+    - 所有更新同步至本機與 Obsidian，並完成雙端 Git 同步推送。
+  - **MCP 伺服器維護**：測試所有 MCP 連線，發現 NotebookLM 認證過期。自動在背景呼叫 `nlm login` 成功進行重新認證，所有 MCP (Firebase, Calendar, NotebookLM, Obsidian) 均恢復 100% 正常。
 - **下一步**：
   - 繼續進行其他播放清單的整理與日常維護。
+
 
