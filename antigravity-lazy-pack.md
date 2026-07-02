@@ -61,7 +61,12 @@
     - 開發並執行 `write_papaya_notes.py` 腳本，將 3 部單一影片生成於 `PAPAYA 電腦教室/` 目錄，將 11 部影片重新調整為**合乎邏輯的學習順序**（HTML/CSS ➔ JS ➔ Git ➔ SQL ➔ Figma ➔ Google Sites ➔ Wix ➔ WordPress 01~04）生成於 `PAPAYA 電腦教室/網頁 & 架站 & 開發` 目錄下。
     - 所有更新同步至本機與 Obsidian，並完成雙端 Git 同步推送。
   - **MCP 伺服器維護**：測試所有 MCP 連線，發現 NotebookLM 認證過期。自動在背景呼叫 `nlm login` 成功進行重新認證，所有 MCP (Firebase, Calendar, NotebookLM, Obsidian) 均恢復 100% 正常。
+  - **三叔Sense Bar 播放清單整理**：
+    - 更新 `url.txt` 後，批次下載並解析【AI_Agent 基本功_學習Agent一定要看的一個系列】播放清單共 3 部影片之資訊與中文 VTT 字幕。
+    - 建立 `三叔Sense Bar` 目錄結構，開發並執行 `write_sanshu_notes.py` 腳本，手動調整為正向順序（EP01 至 EP03）批量生成結構化學習筆記，同步寫入本機 `output` 目錄與 Obsidian `YouTube學習筆記/三叔Sense Bar/AI_Agent 基本功_學習Agent一定要看的一個系列` 中。
+    - 所有更新同步至本機與 Obsidian，並完成雙端 Git 同步推送。
 - **下一步**：
   - 繼續進行其他播放清單的整理與日常維護。
+
 
 
