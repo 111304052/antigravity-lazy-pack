@@ -6,7 +6,6 @@
 * **原始網址**：https://www.youtube.com/watch?v=3s2Q1nViZ1w
 * **播放清單**：AI_Agent 基本功_學習Agent一定要看的一個系列
 * **講者**：三叔Sense Bar
-* **創作者**：三叔Sense Bar
 
 ---
 

@@ -6,7 +6,6 @@
 * **原始網址**：https://www.youtube.com/watch?v=euKP5fg0f-8
 * **播放清單**：網頁 & 架站 & 開發
 * **講者**：PAPAYA 電腦教室
-* **創作者**：PAPAYA 電腦教室
 
 ---
 

@@ -5,7 +5,6 @@
 * **原始網址**：https://www.youtube.com/watch?v=-EivK7vpOXY
 * **講者**：PAPAYA 電腦教室
 * **類別**：單一影片學習筆記
-* **創作者**：PAPAYA 電腦教室
 
 ---
 
