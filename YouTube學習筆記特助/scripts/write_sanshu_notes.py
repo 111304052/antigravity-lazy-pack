@@ -3,7 +3,7 @@ import os
 import shutil
 
 # 定義路徑
-output_base = r"c:\Users\leots\OneDrive\Desktop\Antigravity2.20260626\YouTube學習筆記特助\output\三叔Sense Bar\AI_Agent 基本功_學習Agent一定要看的一個系列"
+output_base = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "output", "YouTube學習筆記特助", "三叔Sense Bar", "AI_Agent 基本功_學習Agent一定要看的一個系列"))
 obsidian_base = r"C:\Users\leots\OneDrive\文件\Secondbrain\YouTube學習筆記\三叔Sense Bar\AI_Agent 基本功_學習Agent一定要看的一個系列"
 
 # 1. 建立目錄

@@ -7,5 +7,5 @@
    ```powershell
    python scripts/generate_exam.py
    ```
-3. 確認 `output/` 目錄已生成 `數學模擬考卷_一元一次方程式.docx`。
+3. 確認專案根目錄的 `output/` 已生成 `數學模擬考卷_一元一次方程式.docx`。
 4. 提供產出檔案的完整路徑給使用者。

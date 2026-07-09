@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>個人化互動式技能樹 & 智慧學習特助</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Google Fonts: Inter & Outfit for modern look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-logo">
+        <div class="logo-icon"><i class="fa-solid fa-network-wired animate-pulse"></i></div>
+        <div class="logo-text">
+          <h1>SkillPulse</h1>
+          <span>個人化學習技能樹與特助</span>
+        </div>
+      </div>
+      
+      <!-- Stats Dashboard -->
+      <div class="header-stats">
+        <div class="stat-badge mastered">
+          <span class="dot"></span>
+          <span class="label">已掌握</span>
+          <span class="value" id="stats-mastered">0</span>
+        </div>
+        <div class="stat-badge learning">
+          <span class="dot animate-ping-slow"></span>
+          <span class="label">學習中</span>
+          <span class="value" id="stats-learning">0</span>
+        </div>
+        <div class="stat-badge planned">
+          <span class="dot"></span>
+          <span class="label">計畫中</span>
+          <span class="value" id="stats-planned">0</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="btn-api-config" class="btn btn-secondary" title="設定 Gemini API 金鑰">
+          <i class="fa-solid fa-key"></i> <span>API 設定</span>
+        </button>
+        <button id="btn-import-export" class="btn btn-secondary" title="備份 / 還原數據">
+          <i class="fa-solid fa-file-import"></i> <span>資料管理</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <main class="app-main">
+      
+      <!-- Skill Tree Area -->
+      <section class="canvas-section">
+        <!-- Canvas Controls -->
+        <div class="canvas-controls">
+          <button id="btn-zoom-in" class="ctrl-btn" title="放大"><i class="fa-solid fa-plus"></i></button>
+          <button id="btn-zoom-out" class="ctrl-btn" title="縮小"><i class="fa-solid fa-minus"></i></button>
+          <button id="btn-zoom-reset" class="ctrl-btn" title="重設視角"><i class="fa-solid fa-arrows-to-dot"></i></button>
+          <div class="ctrl-divider"></div>
+          <button id="btn-add-skill" class="btn btn-primary" title="新增技能節點">
+            <i class="fa-solid fa-circle-plus"></i> 新增技能
+          </button>
+        </div>
+
+        <!-- Legend / Category filter -->
+        <div class="category-legend">
+          <div class="legend-item" data-category="statistics">
+            <span class="legend-color stats"></span>
+            <span>統計與數學</span>
+          </div>
+          <div class="legend-item" data-category="economics">
+            <span class="legend-color econ"></span>
+            <span>經濟與財金</span>
+          </div>
+          <div class="legend-item" data-category="programming">
+            <span class="legend-color prog"></span>
+            <span>程式與資工</span>
+          </div>
+          <div class="legend-item" data-category="data_engineering">
+            <span class="legend-color de"></span>
+            <span>資料工程</span>
+          </div>
+        </div>
+
+        <!-- SVG Canvas -->
+        <div class="svg-wrapper" id="canvas-container">
+          <svg id="skill-tree-svg" width="100%" height="100%">
+            <!-- SVG Definitions for Markers/Gradients -->
+            <defs>
+              <!-- Arrow marker for connections -->
+              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 2 L 8 5 L 0 8 z" fill="rgba(255, 255, 255, 0.2)" />
+              </marker>
+              <!-- Glowing marker -->
+              <marker id="arrow-highlight" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 2 L 8 5 L 0 8 z" fill="#10b981" />
+              </marker>
+              <!-- Background Grid -->
+              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1" />
+              </pattern>
+            </defs>
+            
+            <!-- Grid Background -->
+            <rect width="100%" height="100%" fill="url(#grid)" />
+            
+            <!-- Viewport for zoom & pan -->
+            <g id="svg-viewport">
+              <!-- Links group (rendered below nodes) -->
+              <g id="links-group"></g>
+              <!-- Nodes group -->
+              <g id="nodes-group"></g>
+            </g>
+          </svg>
+
+          <!-- Empty state prompt -->
+          <div id="canvas-empty-state" class="empty-state hidden">
+            <i class="fa-solid fa-diagram-project"></i>
+            <p>點擊「新增技能」按鈕開始建立你的技能樹</p>
+          </div>
+        </div>
+
+        <!-- Node Details Panel (Glow overlay when node is clicked) -->
+        <div id="node-details-panel" class="details-panel hidden">
+          <div class="panel-header">
+            <h3 id="details-title">技能名稱</h3>
+            <button id="btn-close-details" class="close-btn">&times;</button>
+          </div>
+          <div class="panel-body">
+            <div class="info-row">
+              <span class="info-label">分類：</span>
+              <span id="details-category" class="info-value category-tag">分類名稱</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">學習狀態：</span>
+              <select id="details-status" class="status-select">
+                <option value="mastered">已掌握 (Mastered)</option>
+                <option value="learning">學習中 (Learning)</option>
+                <option value="planned">計畫中 (Planned)</option>
+              </select>
+            </div>
+            <div class="info-description">
+              <p id="details-desc">技能描述與應用場景會顯示在這裡...</p>
+            </div>
+            <div id="details-relations" class="relations-container">
+              <!-- Dynamically populated links -->
+            </div>
+          </div>
+          <div class="panel-footer">
+            <button id="btn-edit-node" class="btn btn-secondary"><i class="fa-solid fa-pen-to-square"></i> 編輯</button>
+            <button id="btn-delete-node" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> 刪除</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Assistant Sidebar -->
+      <aside class="assistant-sidebar">
+        <div class="sidebar-header">
+          <div class="assistant-avatar">
+            <i class="fa-solid fa-user-astronaut"></i>
+          </div>
+          <div class="assistant-title">
+            <h3>SkillPulse 特助</h3>
+            <span id="api-status-badge" class="api-status local">本機診斷模式</span>
+          </div>
+        </div>
+
+        <!-- Conversation History -->
+        <div class="chat-container" id="chat-messages">
+          <div class="message system">
+            <div class="msg-avatar"><i class="fa-solid fa-user-astronaut"></i></div>
+            <div class="msg-content">
+              <p>哈囉！我是你的 SkillPulse 學習特助。我已經加載了你的個人化背景（統計學背景、正在學習程式、網頁與 SQL，並熟悉基礎經濟學）。</p>
+              <p>你可以透過下方按鈕快速獲得分析，或直接打字向我諮詢！</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick prompts recommendation -->
+        <div class="quick-prompts-container">
+          <span class="quick-title"><i class="fa-solid fa-wand-magic-sparkles"></i> 推薦諮詢方向：</span>
+          <div class="quick-prompts-grid">
+            <button class="quick-prompt-btn" data-prompt="如何結合我的統計背景與程式技能進行數據分析？">
+              <i class="fa-solid fa-chart-line"></i> 統計 + 程式應用
+            </button>
+            <button class="quick-prompt-btn" data-prompt="我想跨入資料工程(Data Engineering)，應該如何延伸目前的技能？">
+              <i class="fa-solid fa-database"></i> DE 學習方向建議
+            </button>
+            <button class="quick-prompt-btn" data-prompt="分析我目前的技能分佈，並評估學習進度與盲點。">
+              <i class="fa-solid fa-magnifying-glass-chart"></i> 技能分佈診斷
+            </button>
+            <button class="quick-prompt-btn" data-prompt="如何結合總體/個體經濟、投資學觀念與爬蟲、SQL 做專案？">
+              <i class="fa-solid fa-coins"></i> 經濟財金 + 數據爬蟲
+            </button>
+          </div>
+        </div>
+
+        <!-- Chat Input Form -->
+        <div class="sidebar-footer">
+          <form id="chat-form">
+            <input type="text" id="chat-input" placeholder="問問特助關於你的學習路徑..." required autocomplete="off">
+            <button type="submit" id="btn-send-message"><i class="fa-solid fa-paper-plane"></i></button>
+          </form>
+        </div>
+      </aside>
+
+    </main>
+
+    <!-- Modals -->
+
+    <!-- API Key Configuration Modal -->
+    <div id="modal-api" class="modal hidden">
+      <div class="modal-content glass-card">
+        <div class="modal-header">
+          <h2><i class="fa-solid fa-key"></i> Gemini API 金鑰設定</h2>
+          <button class="modal-close" data-close="modal-api">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-hint">
+            SkillPulse 內建「本機診斷模式」為您提供靜態建議。若要獲得動態、無限對話的真實 AI 指導，請在此處貼上您的 <strong>Gemini API Key</strong>：
+          </p>
+          <div class="form-group">
+            <label for="api-key-input">Gemini API Key</label>
+            <input type="password" id="api-key-input" placeholder="AIzaSy..." class="form-control">
+          </div>
+          <p class="api-security-warning">
+            <i class="fa-solid fa-shield-halved"></i> 您的 API Key 將僅安全儲存在瀏覽器的 LocalStorage 中，直接向 Google API 端點發送請求，不會上傳至任何第三方伺服器。
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button id="btn-save-api" class="btn btn-primary">儲存並啟用</button>
+          <button id="btn-clear-api" class="btn btn-secondary">清除 API Key</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Import / Export Data Modal -->
+    <div id="modal-data" class="modal hidden">
+      <div class="modal-content glass-card">
+        <div class="modal-header">
+          <h2><i class="fa-solid fa-file-import"></i> 技能樹資料管理</h2>
+          <button class="modal-close" data-close="modal-data">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="data-action-section">
+            <h3><i class="fa-solid fa-file-export"></i> 備份數據</h3>
+            <p>將目前的技能樹結構、節點位置與狀態匯出為 JSON 備份檔。</p>
+            <button id="btn-export-json" class="btn btn-secondary"><i class="fa-solid fa-download"></i> 匯出為 JSON 檔案</button>
+          </div>
+          <hr class="modal-divider">
+          <div class="data-action-section">
+            <h3><i class="fa-solid fa-file-import"></i> 還原數據</h3>
+            <p>匯入先前備份的 JSON 檔案，以還原技能樹。<strong>注意：這將覆蓋目前的技能樹！</strong></p>
+            <div class="file-upload-wrapper">
+              <input type="file" id="import-file-input" accept=".json" class="hidden">
+              <button id="btn-trigger-import" class="btn btn-secondary"><i class="fa-solid fa-upload"></i> 選擇備份檔案 (.json)</button>
+              <span id="import-file-name" class="file-name-text">未選擇檔案</span>
+            </div>
+            <button id="btn-import-json" class="btn btn-primary mt-2" disabled><i class="fa-solid fa-check"></i> 確認還原</button>
+          </div>
+          <hr class="modal-divider">
+          <div class="data-action-section">
+            <h3><i class="fa-solid fa-rotate-left"></i> 重設為預設技能樹</h3>
+            <p>清除所有自訂技能，並還原回包含統計、程式、經濟、資料工程的初始技能樹佈局。</p>
+            <button id="btn-reset-default" class="btn btn-danger"><i class="fa-solid fa-trash-arrow-up"></i> 還原預設技能樹</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add / Edit Node Modal -->
+    <div id="modal-node-editor" class="modal hidden">
+      <div class="modal-content glass-card">
+        <div class="modal-header">
+          <h2 id="editor-modal-title">新增技能節點</h2>
+          <button class="modal-close" data-close="modal-node-editor">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="node-editor-form">
+            <input type="hidden" id="edit-node-id">
+            
+            <div class="form-group">
+              <label for="edit-node-label">技能名稱 <span class="required">*</span></label>
+              <input type="text" id="edit-node-label" required placeholder="例如：Apache Spark" class="form-control">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col">
+                <label for="edit-node-category">核心領域 <span class="required">*</span></label>
+                <select id="edit-node-category" required class="form-control">
+                  <option value="statistics">統計與數學</option>
+                  <option value="economics">經濟與財金</option>
+                  <option value="programming">程式與資工</option>
+                  <option value="data_engineering">資料工程</option>
+                </select>
+              </div>
+
+              <div class="form-group col">
+                <label for="edit-node-status">學習狀態 <span class="required">*</span></label>
+                <select id="edit-node-status" required class="form-control">
+                  <option value="mastered">已掌握 (Mastered)</option>
+                  <option value="learning">學習中 (Learning)</option>
+                  <option value="planned">計畫中 (Planned)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-node-desc">技能描述與學習筆記</label>
+              <textarea id="edit-node-desc" rows="3" placeholder="簡述此技能的學習內容、目前的理解程度或預計應用的場景..." class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>前置技能 (Prerequisites) <span class="hint">(可複選)</span></label>
+              <div id="prerequisites-list-container" class="checkbox-list-container">
+                <!-- Dynamically populated checkboxes of other nodes -->
+              </div>
+            </div>
+
+            <div class="form-row" style="display: none;"> <!-- Hidden fields for coordinate caching, but accessible in js -->
+              <input type="number" id="edit-node-x">
+              <input type="number" id="edit-node-y">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button id="btn-save-node" type="button" class="btn btn-primary">儲存節點</button>
+          <button class="btn btn-secondary modal-close" data-close="modal-node-editor">取消</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="assistant.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -4,7 +4,7 @@ import re
 import shutil
 
 # 定義路徑
-output_singles = r"c:\Users\leots\OneDrive\Desktop\Antigravity2.20260626\YouTube學習筆記特助\output\PAPAYA 電腦教室"
+output_singles = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "output", "YouTube學習筆記特助", "PAPAYA 電腦教室"))
 output_playlist = os.path.join(output_singles, "網頁 & 架站 & 開發")
 
 obsidian_singles = r"C:\Users\leots\OneDrive\文件\Secondbrain\YouTube學習筆記\PAPAYA 電腦教室"

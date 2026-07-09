@@ -3,7 +3,7 @@ import os
 import sys
 
 # 定義寫入目錄路徑
-output_base = r"c:\Users\leots\OneDrive\Desktop\Antigravity2.20260626\YouTube學習筆記特助\output\AntiGravity_google_AI_Agents"
+output_base = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "output", "YouTube學習筆記特助", "AntiGravity_google_AI_Agents"))
 obsidian_base = r"C:\Users\leots\OneDrive\文件\Secondbrain\YouTube學習筆記\AntiGravity_google_AI_Agents"
 
 os.makedirs(output_base, exist_ok=True)

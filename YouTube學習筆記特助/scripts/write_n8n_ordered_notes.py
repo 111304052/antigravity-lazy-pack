@@ -6,7 +6,7 @@ import re
 import shutil
 
 # 定義路徑
-output_base = r"c:\Users\leots\OneDrive\Desktop\Antigravity2.20260626\YouTube學習筆記特助\output\n8n 工作流基礎教學"
+output_base = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "output", "YouTube學習筆記特助", "n8n 工作流基礎教學"))
 obsidian_base = r"C:\Users\leots\OneDrive\文件\Secondbrain\YouTube學習筆記\n8n 工作流基礎教學"
 input_dir = r"c:\Users\leots\OneDrive\Desktop\Antigravity2.20260626\YouTube學習筆記特助\input"
 

@@ -46,6 +46,6 @@ def create_mock_exam(output_path):
     print(f"[SUCCESS] 考卷生成成功：{output_path}")
 
 if __name__ == "__main__":
-    out_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "output"))
+    out_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "output"))
     out_file = os.path.join(out_dir, "數學模擬考卷_一元一次方程式.docx")
     create_mock_exam(out_file)
