@@ -9,17 +9,21 @@ const isWatch = process.argv.includes('--watch');
 
 /** @type {import('esbuild').BuildOptions} */
 const buildOptions = {
-  entryPoints: [join(__dirname, '../src/index.ts')],
+  entryPoints: [
+    join(__dirname, '../src/index.ts'),
+    join(__dirname, '../src/auth-server.ts')
+  ],
   bundle: true,
   platform: 'node',
   target: 'node18',
-  outfile: join(__dirname, '../build/index.js'),
+  outdir: join(__dirname, '../build'),
   format: 'esm',
   banner: {
     js: '#!/usr/bin/env node\n',
   },
   packages: 'external', // Don't bundle node_modules
   sourcemap: true,
+
 };
 
 if (isWatch) {
@@ -32,6 +36,7 @@ if (isWatch) {
   // Make the file executable on non-Windows platforms
   if (process.platform !== 'win32') {
     const { chmod } = await import('fs/promises');
-    await chmod(buildOptions.outfile, 0o755);
+    await chmod(join(__dirname, '../build/index.js'), 0o755);
   }
+
 } 
